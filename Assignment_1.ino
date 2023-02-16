@@ -37,13 +37,26 @@ void loop()
 void SigA_output(int a, int b, int c, int d)
 {
     int add = 0;
-        
-    for (int i=0; i<c; i++)
+    
+    if (digitalRead(ButtonB_pin) == LOW)
     {
-        pulse(SigA_pin, a + add, b);
-        add = add + 50;
+        for (int i=0; i<c; i++)
+        {
+            pulse(SigA_pin, a + add, b);
+            add = add + 50;
+        }
+        delayMicroseconds(d);
     }
-    delayMicroseconds(d);
+    else
+    {
+        a = a + (c-1)*50;
+        for (int i=0; i<c; i++)
+        {
+            pulse(SigA_pin, a + add, b);
+            add = add - 50;
+        }
+        delayMicroseconds(d);
+    }
 }
 
 
