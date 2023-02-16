@@ -27,8 +27,25 @@ void setup()
 
 void loop()
 {
-    pulse(SigB_pin, paramB_high, 0);
+    if (digitalRead(ButtonA_pin) == LOW)
+    {
+      pulse(SigB_pin, paramB_high, 0);
+      SigA_output(param_a, param_b, param_c, param_d);
+    }
 }
+
+void SigA_output(int a, int b, int c, int d)
+{
+    int add = 0;
+        
+    for (int i=0; i<c; i++)
+    {
+        pulse(SigA_pin, a + add, b);
+        add = add + 50;
+    }
+    delayMicroseconds(d);
+}
+
 
 void pulse(int pin, int high_width, int low_width)
 {
