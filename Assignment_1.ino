@@ -13,6 +13,9 @@ int param_d = 4500; // end delayMicroseconds of waveform
 // Signal B parameter
 int paramB_high = 50; // signal b width
 
+// Mode selector
+int mode = 2;
+
 void setup()
 {
     // Serial monitor setup
@@ -30,35 +33,54 @@ void loop()
     if (digitalRead(ButtonA_pin) == LOW)
     {
       pulse(SigB_pin, paramB_high, 0);
-      SigA_output(param_a, param_b, param_c, param_d);
+      SigA_output(param_a, param_b, param_c, param_d, mode);
     }
 }
 
-void SigA_output(int a, int b, int c, int d)
+void SigA_output(int a, int b, int c, int d, int mode_case)
 {
-    int add = 0;
-    
-    if (digitalRead(ButtonB_pin) == LOW)
+  int add = 0;
+  int inverse = 0;
+  bool button = digitalRead(ButtonB_pin);  
+
+  if (button == HIGH)
+  {
+    switch (mode_case)
     {
-        for (int i=0; i<c; i++)
-        {
-            pulse(SigA_pin, a + add, b);
-            add = add + 50;
-        }
-        delayMicroseconds(d);
+      case 1:
+        c = c - 3;
+        break;
+
+      case 2:
+        a = a + (c-1)*50;
+        inverse = 1;
+        break;
+
+      case 3:
+        c = c + 3;
+        break;
+
+      case 4:
+        b = b/2;
+        d = d/2;
+        break;
+    }
+  }
+
+  for (int i=0; i<c; i++)
+  {
+    pulse(SigA_pin, a + add, b);
+    if (inverse == 1)
+    {
+      add = add - 50;
     }
     else
     {
-        a = a + (c-1)*50;
-        for (int i=0; i<c; i++)
-        {
-            pulse(SigA_pin, a + add, b);
-            add = add - 50;
-        }
-        delayMicroseconds(d);
+      add = add + 50;
     }
+  }
+  delayMicroseconds(b + d);
 }
-
 
 void pulse(int pin, int high_width, int low_width)
 {
