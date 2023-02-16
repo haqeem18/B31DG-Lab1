@@ -6,7 +6,7 @@
 
 // Signal A parameter
 int param_a = 100;  // initial width
-int param_b = 700;  // between pulses
+int param_b = 600;  // between pulses
 int param_c = 6;    // no. of pulses
 int param_d = 4500; // end delayMicroseconds of waveform
 
